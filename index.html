@@ -253,6 +253,126 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/08/hello-world/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="sujinyang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="sujy Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/03/08/hello-world/" itemprop="url">Vue的模板</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-08T16:35:04+08:00">
+                2018-03-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>Vue.js 使用了基于 HTML 的模板语法，允许开发者声明式地将 DOM 绑定至底层 Vue 实例的数据。所有 Vue.js 的模板都是合法的 HTML ，所以能被遵循规范的浏览器和 HTML 解析器解析。在底层的实现上，Vue 将模板编译成虚拟 DOM 渲染函数。结合响应系统，Vue 能够智能地计算出最少需要重新渲染多少组件，并把 DOM 操作次数减到最少。</p>
+<h2 id="模板渲染"><a href="#模板渲染" class="headerlink" title="模板渲染"></a>模板渲染</h2><p>Vue模板的渲染过程入下图所示,首先通过模板compiler编译器将模板变异成AST(抽象语法树)，再由AST生成Vue的render函数，渲染函数结合数据再生成vnode(Virtual DOM树),对vnode进行diff和patch后生成新的UI。<br><img src="../images/vue-template-9.jpg" alt="&#39;vue-template&#39;"></p>
+<h3 id="Virtual-DOM"><a href="#Virtual-DOM" class="headerlink" title="Virtual DOM"></a>Virtual DOM</h3><p>由于操作真实的DOM会对性能带来损失，可以通过模拟真实的DOM对象树，建立一个虚拟DOM对真实DOM 发生的变化保持追踪。<br>vnode包含以下属性<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">this.tag = tag //当前节点的标签名</div><div class="line">this.data = data //当前节点的数据对象</div><div class="line">this.children = children //数组类型，包含了当前节点的子节点</div><div class="line">this.text = text //当前节点的文本，一般文本节点或注释节点会有该属性</div><div class="line">this.elm = elm //当前虚拟节点对应的真实的DOM节点</div><div class="line">this.ns = undefined //节点的namespace</div><div class="line">this.context = context //编译作用域</div><div class="line">this.fnContext = undefined //函数节点的上下文</div><div class="line">this.fnOptions = undefined  //函数options</div><div class="line">this.fnScopeId = undefined //函数作用域id</div><div class="line">this.key = data &amp;&amp; data.key //节点的key属性，用于作为节点的标识，有利于patch的优化</div><div class="line">this.componentOptions = componentOptions //创建组件实例时会用到的选项信息</div><div class="line">this.componentInstance = undefined //组件实例</div><div class="line">this.parent = undefined //组件占位节点</div><div class="line">this.raw = <span class="literal">false</span> //Raw HTML</div><div class="line">this.isStatic = <span class="literal">false</span> //静态节点的标识</div><div class="line">this.isRootInsert = <span class="literal">true</span> //是否作为根节点插入，被&lt;transition&gt;包裹的节点，该属性的值为<span class="literal">false</span></div><div class="line">this.isComment = <span class="literal">false</span> //当前节点是否是注释节点</div><div class="line">this.isCloned = <span class="literal">false</span> //当前节点是否为克隆节点</div><div class="line">this.isOnce = <span class="literal">false</span> //当前节点是否有v-once指令</div><div class="line">this.asyncFactory = asyncFactory</div><div class="line">this.asyncMeta = undefined</div><div class="line">this.isAsyncPlaceholder = <span class="literal">false</span></div></pre></td></tr></table></figure></p>
+<h3 id="createElement函数"><a href="#createElement函数" class="headerlink" title="createElement函数"></a>createElement函数</h3><p>createElement函数用来创建vnode，createElement接受的参数，</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">export</span> <span class="keyword">function</span> createElement (</div><div class="line">  context: Component,</div><div class="line">  tag: any, //一个 HTML 标签字符串，组件选项对象，或者一个返回值</div><div class="line">  data: any, //一个包含模板相关属性的数据对象</div><div class="line">  children: any,  //子节点 (VNodes)，由 `createElement()` 构建而成</div><div class="line">  normalizationType: any,</div><div class="line">  alwaysNormalize: boolean</div><div class="line">)</div></pre></td></tr></table></figure>
+<h3 id="render函数"><a href="#render函数" class="headerlink" title="render函数"></a>render函数</h3><p>Vue的模板实际是编译成了render函数,可以使用Vue.compile(template)方法编译下面的模板<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">&lt;div&gt;</div><div class="line">  &lt;header&gt;</div><div class="line">    &lt;h1&gt;I<span class="string">'m a template!&lt;/h1&gt;</span></div><div class="line">  &lt;/header&gt;</div><div class="line">  &lt;p v-if="message"&gt;</div><div class="line">    &#123;&#123; message &#125;&#125;</div><div class="line">  &lt;/p&gt;</div><div class="line">  &lt;p v-else&gt;</div><div class="line">    No message.</div><div class="line">  &lt;/p&gt;</div><div class="line">&lt;/div&gt;</div></pre></td></tr></table></figure></p>
+<p>render</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="title">function</span></span>() &#123;</div><div class="line">	with(this) &#123;</div><div class="line">		<span class="built_in">return</span> _c(</div><div class="line">		//创建一个div元素</div><div class="line">		<span class="string">'div'</span>,</div><div class="line">		[	</div><div class="line">			// 静态节点 header，此处对应 staticRenderFns 数组索引为 0 的 render 函数</div><div class="line">			_m(0),</div><div class="line">			// 三元表达式，判断 message 是否存在</div><div class="line">			// 如果存在，创建 p 元素，元素里面有文本，值为 toString(message)</div><div class="line">			// 如果不存在，创建 p 元素，元素里面有文本，值为 No message.</div><div class="line">			(message)? _c(<span class="string">'p'</span>, [ _v( _s(message))]) : _c(<span class="string">'p'</span>, [ _v(<span class="string">"No message."</span>)])</div><div class="line">		]</div><div class="line">		)</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line">其中：</div><div class="line">_c : createElement（创建元素）</div><div class="line">_m : renderStatic（渲染静态节点）</div><div class="line">_v : createTextVNode（创建文本DOM）</div><div class="line">_s : toString （转换为字符串）</div></pre></td></tr></table></figure>
+<p>staticRenderFns<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">_m(0): <span class="keyword">function</span> <span class="function"><span class="title">anonymous</span></span>() &#123;</div><div class="line">	with(this) &#123;</div><div class="line">		<span class="built_in">return</span> _c(</div><div class="line">			<span class="string">'header'</span>,</div><div class="line">			[</div><div class="line">				_c(<span class="string">'h1'</span>, [ _v(<span class="string">"I'm a template!"</span>)])</div><div class="line">			]</div><div class="line">		)</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/15/vue-computed计算属性/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -376,6 +496,123 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/18/vue的双向绑定原理/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="sujinyang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="sujy Hexo">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/07/18/vue的双向绑定原理/" itemprop="url">vue的数据双向绑定原理</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-18T21:10:34+08:00">
+                2017-07-18
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="vue数据双向绑定原理"><a href="#vue数据双向绑定原理" class="headerlink" title="vue数据双向绑定原理"></a>vue数据双向绑定原理</h2><p>目前几种主流的框架都实现了数据绑定，大致做法有:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">发布者-订阅者模式(backbone.js)</div><div class="line">脏值检测(angular.js)</div><div class="line">数据劫持+发布者-订阅者模式(vue.js)</div></pre></td></tr></table></figure></p>
+<h3 id="数据劫持"><a href="#数据劫持" class="headerlink" title="数据劫持"></a>数据劫持</h3><p>要实现数据劫持，我们需要了解Object.defineProperty()方法。当我们创建一个普通属性时，可以看到属性描述符的各种性质的默认值，如果需要修改这些默认值，可以使用Object.defineProperty()方法<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">var myObject = &#123;</div><div class="line">    a:1</div><div class="line">&#125;;</div><div class="line">Object.getOwnPropertyDescriptor(myObject, <span class="string">"a"</span>);</div><div class="line">// &#123;</div><div class="line">//    value: 2,</div><div class="line">//    writable: <span class="literal">true</span>,</div><div class="line">//    enumerable: <span class="literal">true</span>,</div><div class="line">//    configurable: <span class="literal">true</span></div><div class="line">// &#125;</div><div class="line"></div><div class="line">Object.defineProperty( myObject, <span class="string">"a"</span>, &#123;</div><div class="line">	value: 3,</div><div class="line">	writable: <span class="literal">true</span>,</div><div class="line">	configurable: <span class="literal">true</span>,</div><div class="line">	enumerable: <span class="literal">true</span></div><div class="line">&#125; );</div><div class="line">myObject.a  //3</div></pre></td></tr></table></figure></p>
+<p>对象里目前存在的属性描述符有两种主要形式：数据描述符和存取描述符。数据描述符是一个具有值的属性，该值可能是可写的，也可能不是可写的。访问器描述符是由getter-setter函数对描述的属性。描述符必须是这两种形式之一；不能同时是两者。如果一个描述符不具有value,writable,get 和 set 任意一个关键字，那么它将被认为是一个数据描述符。如果一个描述符同时有(value或writable)和(get或set)关键字，将会产生一个异常。<br>Vue就是通过Object.defineProperty()来实现数据劫持的。看下面这段代码：设置a属性时会触发set函数，读取a属性时会触发get函数<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">var myObject = &#123;&#125;;</div><div class="line">var score;</div><div class="line">Object.defineProperty(myObject,<span class="string">"a"</span>, &#123;</div><div class="line">    <span class="function"><span class="title">get</span></span>() &#123;</div><div class="line">        console.log(<span class="string">'新的分数'</span>);</div><div class="line">    &#125;,</div><div class="line">    <span class="built_in">set</span>(val) &#123;</div><div class="line">        score = val + <span class="string">'分'</span>;</div><div class="line">        console.log(<span class="string">'分数加上单位'</span>);</div><div class="line">    &#125;</div><div class="line">&#125;)</div><div class="line">myObject.a = 60;  //分数加上单位</div><div class="line">myObject.a  //新的分数</div></pre></td></tr></table></figure></p>
+<h3 id="思路原理"><a href="#思路原理" class="headerlink" title="思路原理"></a>思路原理</h3><p>MVVM数据双向绑定大致是两方面，一是视图改变更新数据，二是数据改变更新视图。视图更新数据靠右通过事件监听实现，比如input标签监听’input’事件，在事件触发函数内修改数据；数据更新视图就运用到上节提到的Object.defineProperty()方法，当数据变化是会触发改方法内的set函数，然后在set函数内更新视图。要实现MVVM数据绑定，需要实现以下几点：<br>1.实现一个数据监听器Observer，用来监听数据对象上的所有属性，一旦数据变化就通知订阅者<br>2.实现一个订阅者watcher，订阅并收到属性变化的通知，然后执行绑定的回调函数更新视图<br>3.实现一个指令解析器，对每个元素节点上的指令进行扫描和解析，根据指令模板替换数据，以及绑定响应的回调函数<br><img src="../images/vue-wwo-way-binding-6.png" alt="&#39;vue-wwo-way-binding&#39;">  </p>
+<h3 id="实现Observer"><a href="#实现Observer" class="headerlink" title="实现Observer"></a>实现Observer</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">function</span> Observer(data) &#123;</div><div class="line">	this.data = data;</div><div class="line">	this.walk(data);</div><div class="line">&#125;</div><div class="line"></div><div class="line">Observer.prototype = &#123;</div><div class="line">	walk(data) &#123;</div><div class="line">		const keys = Object.keys(data);</div><div class="line">		<span class="keyword">for</span> (<span class="built_in">let</span> i = 0, l = keys.length; i &lt; l; i++) &#123;</div><div class="line">			defineReactive(data, keys[i], data[keys[i]])</div><div class="line">		&#125;</div><div class="line">	&#125;,</div><div class="line">	defineReactive(data, key, value) &#123;</div><div class="line">		var dep = new Dep();</div><div class="line">        var childObj = observe(value); // 递归遍历所有子属性</div><div class="line">		Object.defineProperty(data, key, &#123;</div><div class="line">			enumerable: <span class="literal">true</span>, // 可枚举</div><div class="line">            configurable: <span class="literal">true</span>,</div><div class="line">			<span class="function"><span class="title">get</span></span>() &#123;</div><div class="line">				Dep.depend();</div><div class="line">				<span class="built_in">return</span> value;</div><div class="line">			&#125;,</div><div class="line">			<span class="built_in">set</span>(newVal) &#123;</div><div class="line">				<span class="keyword">if</span> (val === newVal) <span class="built_in">return</span>;</div><div class="line">				value = newVal;</div><div class="line">				console.log(<span class="string">'监听的属性'</span>+ key +<span class="string">'变化了,现在的值为'</span>+ newVal);</div><div class="line">				Dep.notify();</div><div class="line">			&#125;</div><div class="line">		&#125;)</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">function</span> observe(data) &#123;</div><div class="line">	<span class="keyword">if</span>(!data || typeOf data !== <span class="string">'Object'</span>) &#123;</div><div class="line">		<span class="built_in">return</span>;</div><div class="line">	&#125;</div><div class="line">	const keys = Object.keys(data);</div><div class="line">	<span class="keyword">for</span> (<span class="built_in">let</span> i = 0, l = keys.length; i &lt; l; i++) &#123;</div><div class="line">		defineReactive(data, keys[i], data[keys[i]])</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">function</span> <span class="function"><span class="title">Dep</span></span>() &#123;</div><div class="line">	this.subs = [];</div><div class="line">&#125;</div><div class="line"></div><div class="line">Dep.prototype = &#123;</div><div class="line">	addSub(sub) &#123;</div><div class="line">		this.subs.push(sub);</div><div class="line">	&#125;,</div><div class="line">	removeSub(sub) &#123;</div><div class="line">		var index = this.subs.indexOf(sub);</div><div class="line">        <span class="keyword">if</span> (index !== -1) &#123;</div><div class="line">            this.subs.splice(index, 1);</div><div class="line">        &#125;</div><div class="line">	&#125;,</div><div class="line">	<span class="function"><span class="title">depend</span></span>() &#123;</div><div class="line">		<span class="keyword">if</span>(Dep.target) &#123;</div><div class="line">			Dep.addSub(watcher);</div><div class="line">		&#125;</div><div class="line">	&#125;,</div><div class="line">	<span class="function"><span class="title">notify</span></span>() &#123;</div><div class="line">		const subs = this.subs.slice();</div><div class="line">		<span class="keyword">for</span> (<span class="built_in">let</span> i = 0, l = subs.length; i &lt; l; i++) &#123;</div><div class="line">			subs[i].update();</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line">Dep.target = null;</div></pre></td></tr></table></figure>
+<h3 id="实现watcher"><a href="#实现watcher" class="headerlink" title="实现watcher"></a>实现watcher</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">function</span> watcher(vm, exp, cb) &#123;</div><div class="line">	this.vm = vm;</div><div class="line">	this.cb = cb;</div><div class="line">	this.exp = exp;</div><div class="line"></div><div class="line">    this.value = this.get();</div><div class="line">&#125;</div><div class="line">watcher.prototype = &#123;</div><div class="line">	<span class="function"><span class="title">update</span></span>() &#123;</div><div class="line">		this.run();// 属性值变化收到通知</div><div class="line">	&#125;,</div><div class="line">	<span class="function"><span class="title">run</span></span>() &#123;</div><div class="line">		var value = this.get();</div><div class="line">		var oldValue = this.value();</div><div class="line">		<span class="keyword">if</span> (oldValue !== value) &#123;</div><div class="line">			this.value = value;</div><div class="line">			this.cb.call(this.vm, value, oldVal);// 执行Compile中绑定的回调，更新视图</div><div class="line">		&#125;</div><div class="line">	&#125;,</div><div class="line">	<span class="function"><span class="title">get</span></span>() &#123;</div><div class="line">		Dep.target = this;</div><div class="line">		var value = this.vm.data[this.exp];</div><div class="line">		Dep.target = null;</div><div class="line">		<span class="built_in">return</span> value;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="实现compile-后续补充"><a href="#实现compile-后续补充" class="headerlink" title="实现compile(后续补充)"></a>实现compile(后续补充)</h3>
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/13/vue模板/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -445,7 +682,7 @@
         
           
             <p>Vue.js 使用了基于 HTML 的模板语法，允许开发者声明式地将 DOM 绑定至底层 Vue 实例的数据。所有 Vue.js 的模板都是合法的 HTML ，所以能被遵循规范的浏览器和 HTML 解析器解析。在底层的实现上，Vue 将模板编译成虚拟 DOM 渲染函数。结合响应系统，Vue 能够智能地计算出最少需要重新渲染多少组件，并把 DOM 操作次数减到最少。</p>
-<h2 id="模板渲染"><a href="#模板渲染" class="headerlink" title="模板渲染"></a>模板渲染</h2><p>Vue模板的渲染过程入下图所示,首先通过模板compiler编译器将模板变异成AST(抽象语法树)，再由AST生成Vue的render函数，渲染函数结合数据再生成vnode(Virtual DOM树),对vnode进行diff和patch后生成新的UI。<br><img src="../images/vue-template-9.jpg" alt="&#39;vue-template&#39;"></p>
+<h2 id="模板渲染"><a href="#模板渲染" class="headerlink" title="模板渲染"></a>模板渲染</h2><p>Vue模板的渲染过程如下图所示,首先通过模板compiler编译器将模板编译成AST(抽象语法树)，再由AST生成Vue的render函数，渲染函数结合数据再生成vnode(Virtual DOM树),对vnode进行diff和patch后生成新的UI。<br><img src="../images/vue-template-9.jpg" alt="&#39;vue-template&#39;"></p>
 <h3 id="Virtual-DOM"><a href="#Virtual-DOM" class="headerlink" title="Virtual DOM"></a>Virtual DOM</h3><p>由于操作真实的DOM会对性能带来损失，可以通过模拟真实的DOM对象树，建立一个虚拟DOM对真实DOM 发生的变化保持追踪。<br>vnode包含以下属性<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">this.tag = tag //当前节点的标签名</div><div class="line">this.data = data //当前节点的数据对象</div><div class="line">this.children = children //数组类型，包含了当前节点的子节点</div><div class="line">this.text = text //当前节点的文本，一般文本节点或注释节点会有该属性</div><div class="line">this.elm = elm //当前虚拟节点对应的真实的DOM节点</div><div class="line">this.ns = undefined //节点的namespace</div><div class="line">this.context = context //编译作用域</div><div class="line">this.fnContext = undefined //函数节点的上下文</div><div class="line">this.fnOptions = undefined  //函数options</div><div class="line">this.fnScopeId = undefined //函数作用域id</div><div class="line">this.key = data &amp;&amp; data.key //节点的key属性，用于作为节点的标识，有利于patch的优化</div><div class="line">this.componentOptions = componentOptions //创建组件实例时会用到的选项信息</div><div class="line">this.componentInstance = undefined //组件实例</div><div class="line">this.parent = undefined //组件占位节点</div><div class="line">this.raw = <span class="literal">false</span> //Raw HTML</div><div class="line">this.isStatic = <span class="literal">false</span> //静态节点的标识</div><div class="line">this.isRootInsert = <span class="literal">true</span> //是否作为根节点插入，被&lt;transition&gt;包裹的节点，该属性的值为<span class="literal">false</span></div><div class="line">this.isComment = <span class="literal">false</span> //当前节点是否是注释节点</div><div class="line">this.isCloned = <span class="literal">false</span> //当前节点是否为克隆节点</div><div class="line">this.isOnce = <span class="literal">false</span> //当前节点是否有v-once指令</div><div class="line">this.asyncFactory = asyncFactory</div><div class="line">this.asyncMeta = undefined</div><div class="line">this.isAsyncPlaceholder = <span class="literal">false</span></div></pre></td></tr></table></figure></p>
 <h3 id="createElement函数"><a href="#createElement函数" class="headerlink" title="createElement函数"></a>createElement函数</h3><p>createElement函数用来创建vnode，createElement接受的参数，</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">export</span> <span class="keyword">function</span> createElement (</div><div class="line">  context: Component,</div><div class="line">  tag: any, //一个 HTML 标签字符串，组件选项对象，或者一个返回值</div><div class="line">  data: any, //一个包含模板相关属性的数据对象</div><div class="line">  children: any,  //子节点 (VNodes)，由 `createElement()` 构建而成</div><div class="line">  normalizationType: any,</div><div class="line">  alwaysNormalize: boolean</div><div class="line">)</div></pre></td></tr></table></figure>
@@ -532,7 +769,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-count">4</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
