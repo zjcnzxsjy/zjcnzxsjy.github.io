@@ -1,0 +1,682 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="异步更新队列指的是当状态发生变化时，Vue异步执行DOM更新。我们来看个例子12345678910111213141516171819202122232425&amp;lt;div id=&amp;quot;example&amp;quot;&amp;gt;    &amp;lt;audio ref=&amp;quot;audio&amp;quot; :src=&amp;quot;url&amp;quot; controls=&amp;quot;controls&amp;quot;&amp;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Vue异步更新队列">
+<meta property="og:url" content="http://yoursite.com/2018/05/04/Vue异步更新队列/index.html">
+<meta property="og:site_name" content="ππ Blog">
+<meta property="og:description" content="异步更新队列指的是当状态发生变化时，Vue异步执行DOM更新。我们来看个例子12345678910111213141516171819202122232425&amp;lt;div id=&amp;quot;example&amp;quot;&amp;gt;    &amp;lt;audio ref=&amp;quot;audio&amp;quot; :src=&amp;quot;url&amp;quot; controls=&amp;quot;controls&amp;quot;&amp;">
+<meta property="og:image" content="http://yoursite.com/images/event_loop.png">
+<meta property="og:updated_time" content="2018-05-04T08:36:37.694Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Vue异步更新队列">
+<meta name="twitter:description" content="异步更新队列指的是当状态发生变化时，Vue异步执行DOM更新。我们来看个例子12345678910111213141516171819202122232425&amp;lt;div id=&amp;quot;example&amp;quot;&amp;gt;    &amp;lt;audio ref=&amp;quot;audio&amp;quot; :src=&amp;quot;url&amp;quot; controls=&amp;quot;controls&amp;quot;&amp;">
+<meta name="twitter:image" content="http://yoursite.com/images/event_loop.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/05/04/Vue异步更新队列/"/>
+
+
+
+
+
+  <title>Vue异步更新队列 | ππ Blog</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">ππ Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/05/04/Vue异步更新队列/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="sujinyang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/background.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ππ Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Vue异步更新队列</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-05-04T16:36:19+08:00">
+                2018-05-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>异步更新队列指的是当状态发生变化时，Vue异步执行DOM更新。我们来看个例子<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">&lt;div id=&quot;example&quot;&gt;</div><div class="line">    &lt;audio ref=&quot;audio&quot; :src=&quot;url&quot; controls=&quot;controls&quot;&gt;&lt;/audio&gt;</div><div class="line">    &lt;div&gt;&lt;button @click=&quot;changeUrl&quot;&gt;Next&lt;/button&gt;&lt;/div&gt;</div><div class="line">&lt;/div&gt;</div><div class="line"></div><div class="line"></div><div class="line">const musicList = [</div><div class="line">    &apos;http://sc1.111ttt.cn:8282/2017/1/11m/11/304112003137.m4a?tflag=1519095601&amp;pin=6cd414115fdb9a950d827487b16b5f97#.mp3&apos;,</div><div class="line">    &apos;http://sc1.111ttt.cn:8282/2017/1/11m/11/304112002493.m4a?tflag=1519095601&amp;pin=6cd414115fdb9a950d827487b16b5f97#.mp3&apos;,</div><div class="line">    &apos;http://sc1.111ttt.cn:8282/2017/1/11m/11/304112004168.m4a?tflag=1519095601&amp;pin=6cd414115fdb9a950d827487b16b5f97#.mp3&apos;</div><div class="line">];</div><div class="line">var vm = new Vue(&#123;</div><div class="line">    el: &apos;#example&apos;,</div><div class="line">    data: &#123;</div><div class="line">        index: 0,</div><div class="line">        url: &apos;&apos;</div><div class="line">    &#125;,</div><div class="line">    methods: &#123;</div><div class="line">        changeUrl() &#123;</div><div class="line">            this.index = (this.index + 1) % musicList.length</div><div class="line">            this.url = musicList[this.index];</div><div class="line">            this.$refs.audio.play();</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+<p>当我们点击Next按钮后，并不能播放下一首音乐<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Uncaught (in promise) DOMException: The element has no supported sources.</div></pre></td></tr></table></figure></p>
+<p>原因就在于audio.play()是同步的，而这个时候DOM更新是异步的，src属性还没有被更新，结果播放的时候src属性为空，就报错了。解决办法就是在play的操作加上this.$nextTick()。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">this.$nextTick(function() &#123;</div><div class="line">    this.$refs.audio.play();</div><div class="line">&#125;);</div></pre></td></tr></table></figure></p>
+<p>在Vue的官方文档中有这样的说明：<br>可能你还没有注意到，Vue 异步执行 DOM 更新。只要观察到数据变化，Vue 将开启一个队列，并缓冲在同一事件循环中发生的所有数据改变。如果同一个 watcher 被多次触发，只会被推入到队列中一次。这种在缓冲时去除重复数据对于避免不必要的计算和 DOM 操作上非常重要。然后，在下一个的事件循环“tick”中，Vue 刷新队列并执行实际 (已去重的) 工作。<br>之所以要采用异步方式更新DOM，是为了避免每次数据发生变化，就马上去重新渲染DOM，数据的状态可能会发生多次，只要计算最后一次状态的变化，这样可以大大减少性能的损耗。</p>
+<h2 id="Event-Loop"><a href="#Event-Loop" class="headerlink" title="Event Loop"></a>Event Loop</h2><p>Vue官方文档中提到在事件循环中执行DOM的刷新。我们先来了解下浏览器Event Loop机制。  </p>
+<h3 id="浏览器Event-Loop"><a href="#浏览器Event-Loop" class="headerlink" title="浏览器Event Loop"></a>浏览器Event Loop</h3><p>javascript是一门单线程语言，JS的所有同步代码都在主线程(执行栈)中执行，当执行一个函数调用时，会创建一个新的执行环境并压到栈中开始执行函数中的代码，当函数中的代码执行完毕后将执行环境从栈中弹出，当栈空了，也就代表执行完毕。在主线程之外，还有一个任务队列(异步)，事实上异步队列也分两种类型：微任务、宏任务。<br>浏览器Event Loop过程如图所示：<br><img src="/images/event_loop.png" alt="image"><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">1. 浏览器中，先执行当前栈，执行完主线程中的任务。</div><div class="line">2. 取出Microtask微任务队列中任务执行直到清空。</div><div class="line">3. 取出Macrotask宏任务中 一个 任务执行。</div><div class="line">4. 检查Microtask微任务中有没有任务，如果有任务执行直到清空。</div><div class="line">5. 重复3和4。</div></pre></td></tr></table></figure></p>
+<p>属于微任务（microtask）的事件有以下几种：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">1. Promise.then</div><div class="line">2. MutationObserver</div><div class="line">3. Object.observe(已废弃)</div><div class="line">4. process.nextTick</div></pre></td></tr></table></figure></p>
+<p>属于宏任务（macrotask）的事件有以下几种：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">1. setTimeout</div><div class="line">2. setInterval</div><div class="line">3. setImmediate</div><div class="line">4. MessageChannel</div><div class="line">5. requestAnimationFrame</div><div class="line">6. I/O</div><div class="line">7. UI交互事件</div></pre></td></tr></table></figure></p>
+<p>看下面的例子帮助我们理解这个过程</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">console.log(1)</div><div class="line">// 栈</div><div class="line">setTimeout(function()&#123;</div><div class="line">    console.log(2)</div><div class="line">    // 微任务</div><div class="line">    Promise.resolve(100).then(function()&#123;</div><div class="line">        console.log(&apos;promise&apos;)</div><div class="line">    &#125;)</div><div class="line">&#125;)</div><div class="line">// 栈</div><div class="line">let promise = new Promise(function(resolve, reject)&#123;</div><div class="line">    console.log(7)</div><div class="line">    resolve(100)</div><div class="line">&#125;).then(function(data)&#123;</div><div class="line">    // 微任务</div><div class="line">    console.log(data)</div><div class="line">&#125;)</div><div class="line">// 栈</div><div class="line">setTimeout(function()&#123;</div><div class="line">    console.log(3)</div><div class="line">&#125;)</div><div class="line">//浏览器结果：1 7 5 100 2 promise 3</div></pre></td></tr></table></figure>
+<p>这是在浏览器中运行的结果。Node.js 是一个基于 Chrome V8 引擎的 JavaScript 运行环境，所以js代码还能在Node中运行，此时Event Loop机制与浏览器略有不同。在这里我们暂时不探讨Node环境的机制。</p>
+<h2 id="Vue异步更新队列"><a href="#Vue异步更新队列" class="headerlink" title="Vue异步更新队列"></a>Vue异步更新队列</h2><p>vue异步更新队列事件循环的tick有可能是在当前的Tick微任务执行阶段执行，也可能是在下一个Tick执行，主要取决于nextTick函数到底是使用Promise/MutationObserver(现废弃采用MessageChannel)还是setTimeout。<br>在Vue 2.4之前的版本中，nextTick几乎都是基于microTask实现的，但是由于microTask的执行优先级非常高，在某些场景之下它甚至要比事件冒泡还要快，就会导致一些诡异的问题；但是如果全部都改成macroTask，对一些有重绘和动画的场景也会有性能的影响。所以最终nextTick采取的策略是默认走microTask，对于一些DOM的交互事件，如v-on绑定的事件回调处理函数的处理，会强制走macroTask。</p>
+<h3 id="应用场景"><a href="#应用场景" class="headerlink" title="应用场景"></a>应用场景</h3><p>在操作DOM节点无效的时候，就要考虑操作的实际DOM节点是否存在，或者相应的DOM是否被更新完毕。比如说，在created钩子中涉及DOM节点的操作肯定是无效的，因为此时还没有完成相关DOM的挂载。解决的方法就是在nextTick函数中去处理DOM，这样才能保证DOM被成功挂载而有效操作。还有就是在数据变化之后要执行某个操作，而这个操作需要使用随数据改变而改变的DOM时，这个操作应该放进Vue.nextTick。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/04/28/css中position的探讨/" rel="next" title="css中position的探讨">
+                <i class="fa fa-chevron-left"></i> css中position的探讨
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/background.jpg"
+               alt="sujinyang" />
+          <p class="site-author-name" itemprop="name">sujinyang</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">8</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Event-Loop"><span class="nav-number">1.</span> <span class="nav-text">Event Loop</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#浏览器Event-Loop"><span class="nav-number">1.1.</span> <span class="nav-text">浏览器Event Loop</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Vue异步更新队列"><span class="nav-number">2.</span> <span class="nav-text">Vue异步更新队列</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#应用场景"><span class="nav-number">2.1.</span> <span class="nav-text">应用场景</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">sujinyang</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
