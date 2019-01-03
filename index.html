@@ -253,6 +253,130 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/03/CSS知识点整理/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="sujinyang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/background.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="ππ Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2019/01/03/CSS知识点整理/" itemprop="url">CSS知识点整理</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-01-03T20:23:51+08:00">
+                2019-01-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="css盒模型以及BFC"><a href="#css盒模型以及BFC" class="headerlink" title="css盒模型以及BFC"></a>css盒模型以及BFC</h2><h3 id="标准盒模型和IE盒子模型"><a href="#标准盒模型和IE盒子模型" class="headerlink" title="标准盒模型和IE盒子模型"></a>标准盒模型和IE盒子模型</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">css盒模型包括：content, padding, border, margin;</div><div class="line">CSS盒模型和IE盒模型的区别：</div><div class="line"></div><div class="line">在 标准盒子模型中，width 和 height 指的是内容区域的宽度和高度。增加内边距、边框和外边距不会影响内容区域的尺寸，但是会增加元素框的总尺寸。</div><div class="line"></div><div class="line">IE盒子模型中，width 和 height 指的是内容区域+border+padding的宽度和高度。</div><div class="line"></div><div class="line">CSS如何设置这两种模型</div><div class="line">/* 设置当前盒子为 标准盒模型（默认） */</div><div class="line">box-sizing: content-box;</div><div class="line"></div><div class="line">/* 设置当前盒子为 IE盒模型 */</div><div class="line">box-sizing: border-box;</div></pre></td></tr></table></figure>
+<h3 id="JS如何设置、获取盒模型对应的宽和高"><a href="#JS如何设置、获取盒模型对应的宽和高" class="headerlink" title="JS如何设置、获取盒模型对应的宽和高"></a>JS如何设置、获取盒模型对应的宽和高</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">方式一：通过DOM节点的 style 样式获取</div><div class="line">element.style.width/height</div><div class="line">缺点：通过这种方式，只能获取行内样式，不能获取内嵌的样式和外链的样式。</div><div class="line"></div><div class="line">方式二（通用型）</div><div class="line">window.getComputedStyle(element).width/height</div><div class="line">方式二能兼容 Chrome、火狐。是通用型方式。</div><div class="line"></div><div class="line">方式三（IE独有的）</div><div class="line">element.currentStyle.width/height</div><div class="line">和方式二相同，但这种方式只有IE独有。获取到的即时运行完之后的宽高（三种css样式都可以获取）。</div><div class="line"></div><div class="line">方式四</div><div class="line">element.getBoundingClientRect().width/height</div><div class="line">此 api 的作用是：获取一个元素的绝对位置。绝对位置是视窗 viewport 左上角的绝对位置。</div><div class="line"></div><div class="line">此 api 可以拿到四个属性：left、top、width、height。</div></pre></td></tr></table></figure>
+<h3 id="margin塌陷-margin重叠"><a href="#margin塌陷-margin重叠" class="headerlink" title="margin塌陷/margin重叠"></a>margin塌陷/margin重叠</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">在标准文档流中，竖直方向的margin不叠加，只取较大的值作为margin(水平方向的margin是可以叠加的，即水平方向没有塌陷现象)。  </div><div class="line">PS：如果不在标准流，比如盒子都浮动了，那么两个盒子之间是没有margin重叠的现象的。</div><div class="line"></div><div class="line">子元素和父元素之间</div><div class="line">如果父元素没有border属性，子元素设置了margin-top，连带父元素一起偏移；父元素设置border属性后就正常了；</div><div class="line">margin这个属性，本质上描述的是兄弟和兄弟之间的距离； 最好不要用这个marign表达父子之间的距离。</div><div class="line">所以，如果要表达父子之间的距离，我们一定要善于使用父亲的padding，而不是儿子的margin。</div></pre></td></tr></table></figure>
+<h3 id="BFC（边距重叠解决方案）"><a href="#BFC（边距重叠解决方案）" class="headerlink" title="BFC（边距重叠解决方案）"></a>BFC（边距重叠解决方案）</h3><p>BFC(Block Formatting Context):块级格式化上下文</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">BFC 的原理/BFC的布局规则</div><div class="line">（1）BFC 内部的子元素，在垂直方向，边距会发生重叠。</div><div class="line">（2）BFC在页面中是独立的容器，外面的元素不会影响里面的元素，反之亦然。</div><div class="line">（3）BFC区域不与旁边的float box区域重叠。（可以用来清除浮动带来的影响）。</div><div class="line">（4）计算BFC的高度时，浮动的子元素也参与计算。</div><div class="line"></div><div class="line">如何生成BFC</div><div class="line">方法1：overflow: 不为visible，可以让属性是 hidden、auto。【最常用】</div><div class="line">方法2：浮动中：float的属性值不为none。意思是，只要设置了浮动，当前元素就创建了BFC。</div><div class="line">方法3：定位中：只要posiiton的值不是 static或者是relative即可，可以是absolute或fixed，也就生成了一个BFC。</div><div class="line">方法4：display为inline-block, table-cell, table-caption, flex, inline-flex</div></pre></td></tr></table></figure>
+<h2 id="三栏布局"><a href="#三栏布局" class="headerlink" title="三栏布局"></a>三栏布局</h2><h3 id="圣杯"><a href="#圣杯" class="headerlink" title="圣杯"></a>圣杯</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line">//html</div><div class="line">&lt;div class=&apos;wraper&apos;&gt;</div><div class="line">    &lt;div class=&apos;main&apos;&gt;main&lt;/div&gt;</div><div class="line">    &lt;div class=&apos;left&apos;&gt;left&lt;/div&gt;</div><div class="line">    &lt;div class=&apos;right&apos;&gt;right&lt;/div&gt;</div><div class="line">&lt;/div&gt;</div><div class="line"></div><div class="line">//css</div><div class="line">.wraper&#123;</div><div class="line">  padding: 0 200px;</div><div class="line">&#125;</div><div class="line">.main&#123;</div><div class="line">  float:left;</div><div class="line">  width:100%;</div><div class="line">  background:green;</div><div class="line">  height:200px;</div><div class="line">&#125;</div><div class="line">.left&#123;</div><div class="line">  width:200px;</div><div class="line">  height:200px;</div><div class="line">  background:red;</div><div class="line">  float:left;</div><div class="line">  margin-left:-100%;</div><div class="line">  position:relative;</div><div class="line">  left:-200px;</div><div class="line">&#125;</div><div class="line">.right&#123;</div><div class="line">  width:200px;</div><div class="line">  height:200px;</div><div class="line">  background:yellow;</div><div class="line">  float:left;</div><div class="line">  margin-left:-200px;</div><div class="line">  position:relative;</div><div class="line">  left:200px;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="双飞翼"><a href="#双飞翼" class="headerlink" title="双飞翼"></a>双飞翼</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line">//html</div><div class="line">&lt;div class=&apos;wraper&apos;&gt;</div><div class="line">    &lt;div class=&apos;main&apos;&gt;</div><div class="line">        &lt;div class=&apos;content&apos;&gt;main&lt;/div&gt;</div><div class="line">    &lt;/div&gt;</div><div class="line">    &lt;div class=&apos;left&apos;&gt;left&lt;/div&gt;</div><div class="line">    &lt;div class=&apos;right&apos;&gt;right&lt;/div&gt;</div><div class="line">&lt;/div&gt;</div><div class="line"></div><div class="line">//css</div><div class="line">.wraper&#123;</div><div class="line"></div><div class="line">&#125;</div><div class="line">.main&#123;</div><div class="line">  float:left;</div><div class="line">  width:100%;</div><div class="line">  height:200px;</div><div class="line">  background:green;</div><div class="line">&#125;</div><div class="line">.content&#123;</div><div class="line">  margin: 0 200px;</div><div class="line">&#125;</div><div class="line">.left&#123;</div><div class="line">  width:200px;</div><div class="line">  height:200px;</div><div class="line">  background:red;</div><div class="line">  float:left;</div><div class="line">  margin-left:-100%;</div><div class="line">&#125;</div><div class="line">.right&#123;</div><div class="line">  width:200px;</div><div class="line">  height:200px;</div><div class="line">  background:yellow;</div><div class="line">  float:left;</div><div class="line">  margin-left:-200px;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="绝对定位"><a href="#绝对定位" class="headerlink" title="绝对定位"></a>绝对定位</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">&lt;div class=&apos;wraper&apos;&gt;</div><div class="line">    &lt;div class=&apos;left&apos;&gt;left&lt;/div&gt;</div><div class="line">    &lt;div class=&apos;main&apos;&gt;main&lt;/div&gt;</div><div class="line">    &lt;div class=&apos;right&apos;&gt;right&lt;/div&gt;</div><div class="line">&lt;/div&gt;</div><div class="line"></div><div class="line">.wraper &#123;</div><div class="line">    position: relative;</div><div class="line">&#125;</div><div class="line">.left &#123;</div><div class="line">    position: absolute;</div><div class="line">    left: 0;</div><div class="line">    width: 200px;</div><div class="line">    height: 200px;</div><div class="line">    background: red;</div><div class="line">&#125;</div><div class="line">.main &#123;</div><div class="line">    position: absolute;</div><div class="line">    left: 200px;</div><div class="line">    right: 200px;</div><div class="line">    height: 200px;</div><div class="line">    background:green;</div><div class="line">&#125;</div><div class="line">.right &#123;</div><div class="line">    position: absolute;</div><div class="line">    right: 0;</div><div class="line">    width: 200px;</div><div class="line">    height: 200px;</div><div class="line">    background: yellow;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="table布局"><a href="#table布局" class="headerlink" title="table布局"></a>table布局</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">&lt;div class=&apos;wraper&apos;&gt;</div><div class="line">    &lt;div class=&apos;left&apos;&gt;left&lt;/div&gt;</div><div class="line">    &lt;div class=&apos;main&apos;&gt;main&lt;/div&gt;</div><div class="line">    &lt;div class=&apos;right&apos;&gt;right&lt;/div&gt;</div><div class="line">&lt;/div&gt;</div><div class="line"></div><div class="line">.wraper &#123;</div><div class="line">    width: 100%;</div><div class="line">    display: table;</div><div class="line">    height: 200px;</div><div class="line">&#125;</div><div class="line">.wraper div &#123;</div><div class="line">    display: table-cell;</div><div class="line">&#125;</div><div class="line">.left &#123;</div><div class="line">    width: 200px;</div><div class="line">    background: red;</div><div class="line">&#125;</div><div class="line">.main &#123;</div><div class="line">    background: green;</div><div class="line">&#125;</div><div class="line">.right &#123;</div><div class="line">    width: 200px;</div><div class="line">    background: yellow;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="flexbox布局"><a href="#flexbox布局" class="headerlink" title="flexbox布局"></a>flexbox布局</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">&lt;div class=&apos;wraper&apos;&gt;</div><div class="line">    &lt;div class=&apos;left&apos;&gt;left&lt;/div&gt;</div><div class="line">    &lt;div class=&apos;main&apos;&gt;main&lt;/div&gt;</div><div class="line">    &lt;div class=&apos;right&apos;&gt;right&lt;/div&gt;</div><div class="line">&lt;/div&gt;</div><div class="line"></div><div class="line">.wraper &#123;</div><div class="line">    display: flex;</div><div class="line">&#125;</div><div class="line">.left &#123;</div><div class="line">    width: 200px;</div><div class="line">    height: 200px;</div><div class="line">    background: red;</div><div class="line">&#125;</div><div class="line">.main &#123;</div><div class="line">    height: 200px;</div><div class="line">    flex: 1;</div><div class="line">    background:green;</div><div class="line">&#125;</div><div class="line">.left &#123;</div><div class="line">    width: 200px;</div><div class="line">    height: 200px;</div><div class="line">    background: yellow;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="grid布局"><a href="#grid布局" class="headerlink" title="grid布局"></a>grid布局</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">&lt;div class=&apos;wraper&apos;&gt;</div><div class="line">    &lt;div class=&apos;left&apos;&gt;left&lt;/div&gt;</div><div class="line">    &lt;div class=&apos;main&apos;&gt;main&lt;/div&gt;</div><div class="line">    &lt;div class=&apos;right&apos;&gt;right&lt;/div&gt;</div><div class="line">&lt;/div&gt;</div><div class="line"></div><div class="line">.wraper &#123;</div><div class="line">    display: grid;</div><div class="line">    width: 100%;</div><div class="line">    grid-template-rows: 200px;</div><div class="line">    grid-template-columns: 200px 1fr 200px;</div><div class="line">&#125;</div><div class="line">.left &#123;</div><div class="line">    background: red;</div><div class="line">&#125;</div><div class="line">.main &#123;</div><div class="line">    background: green;</div><div class="line">&#125;</div><div class="line">.right &#123;</div><div class="line">    background: yellow;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="水平垂直居中"><a href="#水平垂直居中" class="headerlink" title="水平垂直居中"></a>水平垂直居中</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">&lt;div class=&quot;parent&quot;&gt;</div><div class="line">	&lt;div class=&quot;child&quot;&gt;DEMO&lt;/div&gt;</div><div class="line">&lt;/div&gt;</div><div class="line"></div><div class="line">.parent&#123;</div><div class="line">    text-align:center;</div><div class="line">    display:table-cell;</div><div class="line">    vertical-align:middle;</div><div class="line">&#125;</div><div class="line">.child&#123;</div><div class="line">    display:inline-block;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="多边形的绘制"><a href="#多边形的绘制" class="headerlink" title="多边形的绘制"></a>多边形的绘制</h2><h3 id="平行四边形"><a href="#平行四边形" class="headerlink" title="平行四边形"></a>平行四边形</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line">&lt;div class=&quot;parallelograms&quot;&gt;</div><div class="line">    &lt;div&gt;二十首情诗与绝望的歌&lt;/div&gt;</div><div class="line">&lt;/div&gt;</div><div class="line"> .parallelograms&#123;</div><div class="line">    margin: 50px auto;</div><div class="line">    max-width: 200px;</div><div class="line">    padding: 10px;</div><div class="line">    line-height: 30px;</div><div class="line">    text-align: center;</div><div class="line">    color:#fff;</div><div class="line">    background-color: #58a;</div><div class="line">    transform:skew(-45deg);</div><div class="line">&#125;</div><div class="line">.parallelograms div&#123;</div><div class="line">    transform: skew(45deg);</div><div class="line">&#125;</div><div class="line"></div><div class="line">&lt;div class=&quot;parallelograms&quot;&gt;</div><div class="line">    二十首情诗与绝望的歌</div><div class="line">&lt;/div&gt;</div><div class="line">.parallelograms&#123;</div><div class="line">    margin: 50px auto;</div><div class="line">    max-width: 200px;</div><div class="line">    padding: 10px;</div><div class="line">    line-height: 30px;</div><div class="line">    text-align: center;</div><div class="line">    color:#fff;</div><div class="line">    position: relative;</div><div class="line">&#125;</div><div class="line">.parallelograms:before&#123;</div><div class="line">    content:&apos;&apos;;</div><div class="line">    position: absolute;</div><div class="line">    left:0;</div><div class="line">    top:0;</div><div class="line">    right:0;</div><div class="line">    bottom:0;</div><div class="line">    background-color: #58a;</div><div class="line">    transform:skew(-45deg);</div><div class="line">    z-index: -1;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/01/02/常用算法/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -1454,138 +1578,13 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/03/浅谈Javascript模块化/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="sujinyang">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/background.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="ππ Blog">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/06/03/浅谈Javascript模块化/" itemprop="url">浅谈Javascript模块化</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-06-03T19:48:47+08:00">
-                2017-06-03
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="Javascript模块化编程演变进程"><a href="#Javascript模块化编程演变进程" class="headerlink" title="Javascript模块化编程演变进程"></a>Javascript模块化编程演变进程</h2><p>模块好比一个高度独立的功能类，需要时可以随时引入，不需要时可以随时移除而不会影响到整个系统。使用模块有这样几个好处：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">1.可维护性。 因为模块是独立的，一个设计良好的模块会让外面的代码对自己的依赖越少越好，这样自己就可以独立去更新和改进。  </div><div class="line">2.命名空间。 在 JavaScript里面，如果一个变量在最顶级的函数之外声明，它就直接变成全局可用。因此，常常不小心出现命名冲突的情况。使用模块化开发来封装变量，可以避免污染全局环境。</div><div class="line">3.重用代码。 我们有时候会喜欢从之前写过的项目中拷贝代码到新的项目，这没有问题，但是更好的方法是，通过模块引用的方式，来避免重复的代码库。我们可以在更新了模块之后，让引用了该模块的所有项目都同步更新，还能指定版本号，避免 API 变更带来的麻烦。</div></pre></td></tr></table></figure></p>
-<h3 id="直接定义依赖"><a href="#直接定义依赖" class="headerlink" title="直接定义依赖"></a>直接定义依赖</h3><p>最早的时候，我们可能是这样编写代码的<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">function</span> <span class="function"><span class="title">foo</span></span>() &#123;</div><div class="line">    //...</div><div class="line">&#125;</div><div class="line"><span class="keyword">function</span> <span class="function"><span class="title">bar</span></span>() &#123;</div><div class="line">    //...</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>这种方式会在全局对象中加入多个变量，在多人协作时容易造成命名冲突，在代码量多时不利于维护。</p>
-<h3 id="命名空间模式"><a href="#命名空间模式" class="headerlink" title="命名空间模式"></a>命名空间模式</h3><p>这种模式的思路就是将变量定义在一个规定的对象内，然后这个对象再挂靠在全局对象内。实现方式如下<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">function</span> <span class="function"><span class="title">namespace</span></span>() &#123;</div><div class="line">    var a = arguments, o = null, i, j ,d;</div><div class="line">    <span class="keyword">for</span> (i = 0; i &lt; a.length; i++) &#123;</div><div class="line">        d = a[i].split(<span class="string">'.'</span>);</div><div class="line">        o = window;</div><div class="line">        <span class="keyword">for</span>(j = 0; j &lt; d.length; j++) &#123;</div><div class="line">            o[d[j]] = o[d[j]] || &#123;&#125;;</div><div class="line">            o = o[d[j]];</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="built_in">return</span> o;</div><div class="line">&#125;</div><div class="line">namespace(<span class="string">"nav.index"</span>);</div><div class="line">nav.index = <span class="function"><span class="title">function</span></span>() &#123;</div><div class="line">    <span class="built_in">return</span> &#123;</div><div class="line">        foo: <span class="function"><span class="title">function</span></span>() &#123;</div><div class="line">            //...</div><div class="line">        &#125;,</div><div class="line">        bar: <span class="function"><span class="title">function</span></span>() &#123;</div><div class="line">            //...</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;()</div></pre></td></tr></table></figure></p>
-<p>通过开发者工具可以看到window对象下创建了nav对象，对象内又包含index对象，一次类推。由于就是在全局上定义，所有人都可以对这个对象进行修改，一点也不安全。</p>
-<h3 id="闭包模块化模式"><a href="#闭包模块化模式" class="headerlink" title="闭包模块化模式"></a>闭包模块化模式</h3><p>闭包函数拥有独立的作用域，其中声明的变量只在该作用域里，可以通过暴露一些方法来访问和操作闭包内的变量。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">var module = (<span class="function"><span class="title">function</span></span>() &#123;</div><div class="line">    var _private = <span class="string">'hello private'</span>;</div><div class="line">    var foo = <span class="function"><span class="title">function</span></span>() &#123;</div><div class="line">        <span class="built_in">return</span> _private;</div><div class="line">    &#125;</div><div class="line">    <span class="built_in">return</span> &#123;</div><div class="line">        foo:foo</div><div class="line">    &#125;</div><div class="line">&#125;)()</div><div class="line">module.foo() //hello private</div><div class="line">module._private //undefined</div></pre></td></tr></table></figure></p>
-<p>同是，不同模块之间的应用可以通过参数的形式传递。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">var module = (<span class="keyword">function</span>($) &#123;</div><div class="line">    var _<span class="variable">$body</span> = $(<span class="string">'body'</span>);</div><div class="line">    var foo = <span class="function"><span class="title">function</span></span>() &#123;</div><div class="line">        console.log(_<span class="variable">$body</span>);</div><div class="line">    &#125;</div><div class="line">    <span class="built_in">return</span> &#123;</div><div class="line">        foo:foo</div><div class="line">    &#125;</div><div class="line">&#125;)()</div><div class="line">module.foo(Jquery)</div></pre></td></tr></table></figure></p>
-<p>这些方案虽然解决了依赖关系的问题，但是没有解决如何管理这些模块，或者说在使用时清晰描述出依赖关系。有兴趣的小伙伴可以去了解下LABjs和YUI，这些都是优秀的模块管理工具。</p>
-<h3 id="CommonJS"><a href="#CommonJS" class="headerlink" title="CommonJS"></a>CommonJS</h3><p>nodejs的出现使得前端开发者可以使用js开发服务端，并且随着nodejs的普及，CommonJS方案也被人们熟知。CommonJs是一套同步的方案。每个文件都是一个模块，有自己的作用域。在一个文件里面定义的变量、函数、类都是私有的，对其他文件是不见的。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">//math.js</div><div class="line">export.add = <span class="keyword">function</span>(a,b) &#123;</div><div class="line">    <span class="built_in">return</span> a + b;</div><div class="line">&#125;</div><div class="line">//main.js</div><div class="line">var math = require(<span class="string">'math'</span>);</div><div class="line">console.log(math.add(1,2); //3</div></pre></td></tr></table></figure></p>
-<p>由于服务器上通过require加载资源是直接读取文件的，因此中间所需的时间可以忽略不计，但是在浏览器这种需要依赖HTTP获取资源的就不行，资源的获取所需时间的不确定，这就导致必须使用移除机制。</p>
-<h3 id="AMD"><a href="#AMD" class="headerlink" title="AMD"></a>AMD</h3><p>与Module/1.0(CommonJS)的差异：<br>1执行时机的差异<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">Module/1.0</div><div class="line">var a = require(&apos;./a&apos;); // 执行到此处时，a.js 才同步下载并执行</div><div class="line"></div><div class="line">AMD</div><div class="line">define([&apos;require&apos;],function(require) &#123;</div><div class="line">    // 在这里，模块 a 已经下载并执行好</div><div class="line">    // ...</div><div class="line">    var a = require(&apos;./a&apos;); //此处仅仅是取模块 a 的 exports</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
-<p>2.书写风格的差异<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line">// Module/1.0</div><div class="line">var a = require(&quot;./a&quot;);  // 依赖就近</div><div class="line">a.doSomething();</div><div class="line"></div><div class="line">// AMD recommended style</div><div class="line">define([&quot;a&quot;, &quot;b&quot;, &quot;c&quot;, &quot;d&quot;, &quot;e&quot;, &quot;f&quot;], function(a, b, c, d, e, f) &#123;</div><div class="line"></div><div class="line">    // 等于在最前面申明并初始化了要用到的所有模块</div><div class="line"></div><div class="line">   if (false) &#123;</div><div class="line">       // 即便压根儿没用到某个模块 b，但 b 还是提前执行了</div><div class="line">       b.foo()</div><div class="line">   &#125;</div><div class="line"></div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
-<h3 id="CMD"><a href="#CMD" class="headerlink" title="CMD"></a>CMD</h3><p>CMD模式的代表就是SeaJS。seaJS的书写风格类似CommonJS，与RequireJS有不少不同点。<br>1.遵循的规范不同<br>RequireJS遵循的是Modules/AMD规范。<br>SeaJS遵循的是Modules/wrappings规范的define形式。<br>2.factory的执行时机不同<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">在Requirejs里模块有多种书写格式，推荐的是:</div><div class="line">define([&apos;./a&apos;,&apos;./b&apos;],function(a,b) &#123;</div><div class="line">    a.dosomething();  // 依赖前置，提前执行</div><div class="line">    b.dosomething();</div><div class="line">&#125;);</div><div class="line">在 SeaJS 里，模块只有一种书写格式:</div><div class="line">define(function(require, exports, module)&#123;</div><div class="line">    require(&apos;./a&apos;).doSomething();</div><div class="line">    require(&apos;./b&apos;).doSomething(); // 依赖就近，延迟执行</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
-<h3 id="ES6"><a href="#ES6" class="headerlink" title="ES6"></a>ES6</h3><p>ES6模块的设计思想是尽量的静态化，使得编译时就能确定模块的依赖关系，以及输入和输出的变量。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">//Button.js</div><div class="line"><span class="keyword">function</span> <span class="function"><span class="title">button</span></span>() &#123;</div><div class="line">    //...</div><div class="line">&#125;</div><div class="line"><span class="built_in">export</span> &#123;button&#125;</div><div class="line">//components.js</div><div class="line">import &#123;button&#125; from <span class="string">'./Button'</span></div><div class="line">使用import命令的时候，用户需要知道所要加载的变量名或函数名，否则无法加载。另外一种方式使用<span class="built_in">export</span> default命令，为模块指定默认输出。</div><div class="line">//Button.js</div><div class="line"><span class="built_in">export</span> dafault <span class="function"><span class="title">function</span></span>() &#123;</div><div class="line">    //...</div><div class="line">&#125;</div><div class="line">//components.js</div><div class="line">import button from <span class="string">'./Button'</span></div></pre></td></tr></table></figure></p>
-<p>export default命令用于指定模块的默认输出。显然，一个模块只能有一个默认输出，因此export default命令只能使用一次。所以，import命令后面才不用加大括号，因为只可能唯一对应export default命令。</p>
-<h3 id="ES6模块和CommonJS模块的差异"><a href="#ES6模块和CommonJS模块的差异" class="headerlink" title="ES6模块和CommonJS模块的差异"></a>ES6模块和CommonJS模块的差异</h3><h4 id="CommonJS模块输出的是值的拷贝，ES6模块输出的是值的引用"><a href="#CommonJS模块输出的是值的拷贝，ES6模块输出的是值的引用" class="headerlink" title="CommonJS模块输出的是值的拷贝，ES6模块输出的是值的引用"></a>CommonJS模块输出的是值的拷贝，ES6模块输出的是值的引用</h4><p>CommonJS 模块输出的是值的拷贝，如果这个值类型是简单数据类型，模块内部的变化就影响不到这个值；如果这个是类型是引用数据类型，模块内部的变化是会影响到这个值的。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">//lib.js</div><div class="line">var counter = 1;</div><div class="line"><span class="keyword">function</span> <span class="function"><span class="title">incCounter</span></span>() &#123;</div><div class="line">    counter++</div><div class="line">&#125;</div><div class="line">var obj = &#123;</div><div class="line">    init:1</div><div class="line">&#125;;</div><div class="line"><span class="keyword">function</span> <span class="function"><span class="title">changeObj</span></span>() &#123;</div><div class="line">    obj.init += 1;</div><div class="line">&#125;</div><div class="line">module.exports = &#123;</div><div class="line">    counter: counter,</div><div class="line">    obj: obj,</div><div class="line">    incCounter: incCounter,</div><div class="line">    changeObj: changeObj</div><div class="line">&#125;;</div><div class="line">//main.js</div><div class="line">var mod = require(<span class="string">'./lib'</span>);</div><div class="line"></div><div class="line">console.log(mod.counter);  // 1</div><div class="line">console.log(mod.obj);      //&#123;init:1&#125;</div><div class="line">mod.incCounter();</div><div class="line">mod.changeObj();</div><div class="line">console.log(mod.counter); // 1</div><div class="line">console.log(mod.obj);     //&#123;init:2&#125;</div></pre></td></tr></table></figure></p>
-<p>ES6 模块的运行机制与CommonJS不一样。JS引擎对脚本静态分析的时候，遇到模块加载命令import，就会生成一个只读引用。等到脚本真正执行时，再根据这个只读引用，到被加载的那个模块里面去取值。换句话说，ES6的import有点像Unix系统的“符号连接”，原始值变了，import加载的值也会跟着变。因此，ES6模块是动态引用，并且不会缓存值，模块里面的变量绑定其所在的模块。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">// lib.js</div><div class="line"><span class="built_in">export</span> <span class="built_in">let</span> counter = 1;</div><div class="line"><span class="built_in">export</span> <span class="keyword">function</span> <span class="function"><span class="title">incCounter</span></span>() &#123;</div><div class="line">  counter++;</div><div class="line">&#125;</div><div class="line"></div><div class="line">// main.js</div><div class="line">import &#123; counter, incCounter &#125; from <span class="string">'./lib'</span>;</div><div class="line">console.log(counter); // 1</div><div class="line">incCounter();</div><div class="line">console.log(counter); // 2</div></pre></td></tr></table></figure></p>
-<h4 id="CommonJS模块是运行时加载，ES6模块是编译时输出接口"><a href="#CommonJS模块是运行时加载，ES6模块是编译时输出接口" class="headerlink" title="CommonJS模块是运行时加载，ES6模块是编译时输出接口"></a>CommonJS模块是运行时加载，ES6模块是编译时输出接口</h4><p>CommonJS加载的是一个对象(即module.exports属性)，该对象只有在脚本运行完才会生成。而ES6模块不是对象，它的对外接口只是一种静态定义，在代码静态解析阶段就会生成。  </p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
+  <nav class="pagination">
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+  </nav>
+
 
 
           </div>
@@ -1628,7 +1627,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-count">11</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
